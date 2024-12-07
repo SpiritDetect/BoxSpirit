@@ -123,30 +123,34 @@
       document.getElementById('playButton5')
     ];
 
-    let currentAudioPlayer = null;
-
-    function stopCurrentAudio() {
-      if (currentAudioPlayer) {
-        currentAudioPlayer.pause();
-        currentAudioPlayer.currentTime = 0;
-        playButtons[audioPlayers.indexOf(currentAudioPlayer)].textContent = `Start ${playButtons[audioPlayers.indexOf(currentAudioPlayer)].textContent.split(' ')[1]}`;
-        currentAudioPlayer = null;
-      }
-    }
+    const buttonLabels = [
+      'Scan A',
+      'Scan B Robotic',
+      'Scan C Experiment',
+      'Scan D EVP',
+      'Scan E Voice'
+    ];
 
     playButtons.forEach((button, index) => {
       button.addEventListener('click', () => {
         const audioPlayer = audioPlayers[index];
 
         if (audioPlayer.paused) {
-          stopCurrentAudio();
+          // Stop all other audio players
+          audioPlayers.forEach((player, i) => {
+            if (!player.paused) {
+              player.pause();
+              playButtons[i].textContent = `Start ${buttonLabels[i]}`;
+            }
+          });
+
+          // Play the current audio and update the button label
           audioPlayer.play();
-          button.textContent = `Stop ${button.textContent.split(' ')[1]}`;
-          currentAudioPlayer = audioPlayer;
+          button.textContent = `Stop ${buttonLabels[index]}`;
         } else {
+          // Pause the current audio and reset the button label
           audioPlayer.pause();
-          button.textContent = `Start ${button.textContent.split(' ')[1]}`;
-          currentAudioPlayer = null;
+          button.textContent = `Start ${buttonLabels[index]}`;
         }
       });
     });
