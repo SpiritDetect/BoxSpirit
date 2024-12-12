@@ -136,14 +136,6 @@
         const audioPlayer = audioPlayers[index];
 
         if (audioPlayer.paused) {
-          // Stop all other audio players
-          audioPlayers.forEach((player, i) => {
-            if (!player.paused) {
-              player.pause();
-              playButtons[i].textContent = `Start ${buttonLabels[i]}`;
-            }
-          });
-
           // Play the current audio and update the button label
           audioPlayer.play();
           button.textContent = `Stop ${buttonLabels[index]}`;
